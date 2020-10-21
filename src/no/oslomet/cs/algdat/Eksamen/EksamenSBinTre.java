@@ -189,7 +189,23 @@ public class EksamenSBinTre<T> {
     }
 
     public ArrayList<T> serialize() {
-        
+        ArrayDeque<Node<T>> kø = new ArrayDeque<>();
+        ArrayList<T> serializedList = new ArrayList<>();
+        kø.addFirst(rot);
+        while (!kø.isEmpty()) {
+            Node<T> current = kø.removeFirst();
+
+            serializedList.add(current.verdi);
+            if (current.venstre != null) {
+                kø.addLast(current.venstre);
+            }
+
+            if (current.høyre != null) {
+                kø.addLast(current.høyre);
+            }
+        }
+
+        return serializedList;
     }
 
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {

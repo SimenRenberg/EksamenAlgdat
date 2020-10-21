@@ -16,5 +16,5 @@ Se oblig-tekst for alle krav, og husk spesielt på følgende:
 
 Vi har brukt git til å dokumentere arbeidet vårt. Jeg har 16 commits totalt, og hver logg-melding beskriver det jeg har gjort av endringer.
 
-* Oppgave 1: Løste ved å implementere ...
-* Oppgave 2: ...
+* Oppgave 1: Oppgaven ble løst ved å kopiere løsningen fra kompendiet (5.2 3a), med endringer for å passe på at forelder-referansen ble med.
+* Oppgave 2: Oppgaven ble løst ved å benytte meg av bredde-først traversering, fra kodegjennomgangen fra uke 9, da fordi hele treet må løpes gjennom.

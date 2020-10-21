@@ -114,7 +114,28 @@ public class EksamenSBinTre<T> {
     }
 
     public int antall(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        int antall = 0;
+
+        ArrayDeque<Node> queue = new ArrayDeque<>();
+        queue.add(rot);
+
+        while (!queue.isEmpty()){
+            Node current = queue.removeFirst();
+
+            if (current.verdi == verdi){
+                antall++;
+            }
+
+            if (current.venstre != null){
+                queue.addFirst(current.venstre);
+            }
+
+            if (current.høyre != null){
+                queue.addFirst(current.høyre);
+            }
+
+        }
+        return antall;
     }
 
     public void nullstill() {
@@ -122,11 +143,28 @@ public class EksamenSBinTre<T> {
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (p.venstre != null){
+            return førstePostorden(p.venstre);
+        } else if (p.høyre != null){
+            return førstePostorden(p.høyre);
+        } else {
+            return p;
+        }
+
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (p.forelder == null){
+            return null;
+        }
+        if (p.forelder.høyre == p){
+            return p.forelder;
+        } else if (p.forelder.høyre == null){
+            return p.forelder;
+        } else {
+                return førstePostorden(p.forelder.høyre);
+        }
+
     }
 
     public void postorden(Oppgave<? super T> oppgave) {

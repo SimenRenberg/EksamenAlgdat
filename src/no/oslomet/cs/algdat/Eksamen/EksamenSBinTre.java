@@ -209,7 +209,11 @@ public class EksamenSBinTre<T> {
     }
 
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        EksamenSBinTre<K> deserializedTree = new EksamenSBinTre<>(c);
+        for (var item : data) {
+            deserializedTree.leggInn(item);
+        }
+        return deserializedTree;
     }
 
 

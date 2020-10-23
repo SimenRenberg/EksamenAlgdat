@@ -1,6 +1,7 @@
 package no.oslomet.cs.algdat.Eksamen;
 
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.*;
 
 public class EksamenSBinTre<T> {
@@ -147,28 +148,44 @@ public class EksamenSBinTre<T> {
     }
 
     public int fjernAlle(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (rot == null) return 0;
+        int antallFjernet = 0;
+        ArrayDeque<Node<T>> deque = new ArrayDeque<>();
+        deque.add(rot);
+
+        while (!deque.isEmpty()){
+            Node<T> curr = deque.removeFirst();
+            if (curr.verdi == verdi){
+                if(fjern(verdi)){
+                    antallFjernet++;
+                }
+            }
+            if (curr.venstre != null) deque.addFirst(curr.venstre);
+            if (curr.høyre != null) deque.addFirst(curr.høyre);
+        }
+
+        return antallFjernet;
     }
 
     public int antall(T verdi) {
         int antall = 0;
 
-        ArrayDeque<Node> queue = new ArrayDeque<>();
-        queue.add(rot);
+        ArrayDeque<Node<T>> deque = new ArrayDeque<>();
+        deque.add(rot);
 
-        while (!queue.isEmpty()){
-            Node current = queue.removeFirst();
+        while (!deque.isEmpty()){
+            Node<T> current = deque.removeFirst();
 
             if (current.verdi == verdi){
                 antall++;
             }
 
             if (current.venstre != null){
-                queue.addFirst(current.venstre);
+                deque.addFirst(current.venstre);
             }
 
             if (current.høyre != null){
-                queue.addFirst(current.høyre);
+                deque.addFirst(current.høyre);
             }
 
         }
@@ -176,7 +193,32 @@ public class EksamenSBinTre<T> {
     }
 
     public void nullstill() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (rot != null) {
+            if (antall != 1){
+                ArrayDeque<Node<T>> deque = new ArrayDeque<>();
+                deque.addFirst(rot);
+                while (!deque.isEmpty()) {
+                    Node<T> current = deque.removeFirst();
+
+                    if (current.venstre != null) {
+                        deque.addFirst(current.venstre);
+                    }
+
+                    if (current.høyre != null) {
+                        deque.addFirst(current.høyre);
+                    }
+                    current.høyre = null;
+                    current.venstre = null;
+                    current.forelder = null;
+                    antall--;
+                    endringer++;
+                }
+            } else {
+                rot = null;
+                antall--;
+                endringer++;
+            }
+        }
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
@@ -226,19 +268,19 @@ public class EksamenSBinTre<T> {
     }
 
     public ArrayList<T> serialize() {
-        ArrayDeque<Node<T>> kø = new ArrayDeque<>();
+        ArrayDeque<Node<T>> deque = new ArrayDeque<>();
         ArrayList<T> serializedList = new ArrayList<>();
-        kø.addFirst(rot);
-        while (!kø.isEmpty()) {
-            Node<T> current = kø.removeFirst();
+        deque.addFirst(rot);
+        while (!deque.isEmpty()) {
+            Node<T> current = deque.removeFirst();
 
             serializedList.add(current.verdi);
             if (current.venstre != null) {
-                kø.addLast(current.venstre);
+                deque.addLast(current.venstre);
             }
 
             if (current.høyre != null) {
-                kø.addLast(current.høyre);
+                deque.addLast(current.høyre);
             }
         }
 

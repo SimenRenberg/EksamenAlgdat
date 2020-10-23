@@ -108,7 +108,7 @@ public class EksamenSBinTre<T> {
     public boolean fjern(T verdi) {
         if (verdi == null) return false;  // treet har ingen nullverdier
 
-        Node<T> p = rot, q = null;   // q skal være forelder til p
+        Node<T> p = rot, q = rot.forelder;   // q skal være forelder til p
 
         while (p != null)            // leter etter verdi
         {
@@ -125,6 +125,7 @@ public class EksamenSBinTre<T> {
             if (p == rot) rot = b;
             else if (p == q.venstre) q.venstre = b;
             else q.høyre = b;
+            if (b!=null) b.forelder = q;
         }
         else  // Tilfelle 3)
         {

@@ -106,6 +106,8 @@ public class EksamenSBinTre<T> {
             return true;                             // vellykket innlegging
     }
 
+    //Denne koden er kopiert fra kompendiet - programkode 5.2.8 d)
+    //den er blitt endret slik at etter sletting så får barnet (b) riktig forelder, så sant barnet faktisk er opprettet.
     public boolean fjern(T verdi) {
         if (verdi == null) return false;  // treet har ingen nullverdier
 

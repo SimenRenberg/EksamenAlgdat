@@ -149,6 +149,7 @@ public class EksamenSBinTre<T> {
         return true;
     }
 
+    //Legger treet inn i et ArrayDeque og benytter seg av fjern(T verdi)-metoden hver gang verdien blir tatt ut av køen.
     public int fjernAlle(T verdi) {
         if (rot == null) return 0;
         int antallFjernet = 0;
@@ -169,6 +170,8 @@ public class EksamenSBinTre<T> {
         return antallFjernet;
     }
 
+    //Går inn i treet med dybde-først ved hjelp av et arraydeque, og teller hver gang
+    //verdien blir funnet når en node blir tatt ut av køen.
     public int antall(T verdi) {
         int antall = 0;
 
@@ -178,10 +181,12 @@ public class EksamenSBinTre<T> {
         while (!deque.isEmpty()){
             Node<T> current = deque.removeFirst();
 
+            //verdien er funnet
             if (current.verdi == verdi){
                 antall++;
             }
 
+            //hvis ikke, fortsett nedover.
             if (current.venstre != null){
                 deque.addFirst(current.venstre);
             }
@@ -194,9 +199,14 @@ public class EksamenSBinTre<T> {
         return antall;
     }
 
+
     public void nullstill() {
+
+        //Så lenge roten finnes
         if (rot != null) {
+            //og ikke bare roten finnes
             if (antall != 1){
+                //nuller alt nedover hele treet
                 ArrayDeque<Node<T>> deque = new ArrayDeque<>();
                 deque.addFirst(rot);
                 while (!deque.isEmpty()) {
@@ -216,6 +226,7 @@ public class EksamenSBinTre<T> {
                     endringer++;
                 }
             } else {
+                //Hvis det kun er treet som finnes, null det.
                 rot = null;
                 antall--;
                 endringer++;
@@ -224,10 +235,16 @@ public class EksamenSBinTre<T> {
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
+        //dersom vi kan gå til venstre
         if (p.venstre != null){
             return førstePostorden(p.venstre);
+
+            //dersom vi ikke kan gå til venstre lenger.
+            //rekursjonen vil fortsatt fortsette til venstre om p.høyre har et venstrebarn.
         } else if (p.høyre != null){
             return førstePostorden(p.høyre);
+
+            //vi er lengst ned til venstre i treet.
         } else {
             return p;
         }
@@ -238,10 +255,16 @@ public class EksamenSBinTre<T> {
         if (p.forelder == null){
             return null;
         }
+        //hvis p er sin foreldres høyre, så er forelderen den neste
         if (p.forelder.høyre == p){
             return p.forelder;
+
+        // Hvis p ikke har en til høyre, så er p sin foreldre den neste
         } else if (p.forelder.høyre == null){
             return p.forelder;
+
+        //hvis ikke, så vil nestemann være det som førstePostorder() returnerer. (fortsetter så langt til venstre som er mulig).
+        //tilfellet her er: p er sin foreldres venstre, og foreldren har en høyrenode.
         } else {
                 return førstePostorden(p.forelder.høyre);
         }
@@ -249,7 +272,10 @@ public class EksamenSBinTre<T> {
     }
 
     public void postorden(Oppgave<? super T> oppgave) {
+        //begynn ved første i postorden
         Node<T> p = førstePostorden(rot);
+
+        //mens det finnes verdier, fortsett i postorden.
         while (p != null){
             oppgave.utførOppgave(p.verdi);
             p = nestePostorden(p);
@@ -261,14 +287,18 @@ public class EksamenSBinTre<T> {
     }
 
     private void postordenRecursive(Node<T> p, Oppgave<? super T> oppgave) {
+        //så lenge p ikke er null,
         if (p == null){
             return;
         }
+        //traverser treet i postorden og utfør oppgaven
         postordenRecursive(p.venstre, oppgave);
         postordenRecursive(p.høyre, oppgave);
         oppgave.utførOppgave(p.verdi);
     }
 
+    //samme metodikk som i fjernAlle(), og Antall().
+    //legger en og en nodes verdi i et array, med FIFO.
     public ArrayList<T> serialize() {
         ArrayDeque<Node<T>> deque = new ArrayDeque<>();
         ArrayList<T> serializedList = new ArrayList<>();
@@ -289,6 +319,7 @@ public class EksamenSBinTre<T> {
         return serializedList;
     }
 
+    //fordi data-listen har blitt populert med FIFO, vil en enkel loop fylle treet riktig.
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
         EksamenSBinTre<K> deserializedTree = new EksamenSBinTre<>(c);
         for (var item : data) {
